@@ -18,3 +18,6 @@ Since the speed of sound is a function of temperature, pressure and salinity (a 
 ## Application window
 ![Screenshot](/Pics/screen1.png)
 
+## Simulation
+![Simulation](/Pics/simulation.png)
+
