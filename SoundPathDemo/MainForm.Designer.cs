@@ -271,7 +271,6 @@
             this.verticalPropagationPlot.TabIndex = 5;
             this.verticalPropagationPlot.Zmax = 1000D;
             this.verticalPropagationPlot.Zmin = 0D;
-            this.verticalPropagationPlot.ZTicks = 10;
             // 
             // vProfileView
             // 

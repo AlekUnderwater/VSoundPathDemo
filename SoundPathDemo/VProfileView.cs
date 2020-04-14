@@ -20,6 +20,7 @@ namespace SoundPathDemo
         int vTickPeriod = 1;
 
         public int ZTicks { get; private set; }
+        public double ZStep { get; private set; }
                       
         #region Axis
 
@@ -225,13 +226,14 @@ namespace SoundPathDemo
             sStep = sRange / tsTicks;
 
             if (tsp.Length <= 30)
-                vTickPeriod = 1;
+                ZTicks = tsp.Length;
             else
             {
-                vTickPeriod = Convert.ToInt32(Math.Ceiling((double)tsp.Length / 10));
+                ZTicks = 10;
             }
 
-            ZTicks = tsp.Length / vTickPeriod - 1;
+            //ZStep = FitAxisStep(Zmax - Zmin) / ZTicks;
+            ZStep = FitAxisStepByRange(Zmax - Zmin);
 
             ProfileChangedEvent.Rise(this, new EventArgs());
         }
@@ -242,6 +244,17 @@ namespace SoundPathDemo
             Array.Copy(tsp, result, tsp.Length);
             return result;
         }
+
+        private double FitAxisStepByRange(double range)
+        {
+            double x = Math.Pow(10.0, Math.Floor(Math.Log10(range)));
+            if (range / x >= 5)
+                return x;
+            else if (range / (x / 2.0) >= 5)
+                return x / 2.0;
+            else
+                return x / 5.0;
+        }      
 
         #endregion
 
@@ -289,21 +302,40 @@ namespace SoundPathDemo
                 e.Graphics.TranslateTransform(
                     graphBorder.Left - axisTickSize - axisLblMaxSize.Width - lblSize.Height,
                     -(graphBorder.Top + graphBorder.Height / 2 - lblSize.Width / 2));
+
                 
+                float zStep = Convert.ToSingle(ZStep);
+                z = zStep;
+                float za;
+                while (z <= Zmax - zStep / 2)
+                {
+                    za = graphBorder.Top + z * zscale;
+                    e.Graphics.DrawLine(axisPen, x, za, x - axisTickSize, za);
+                    lbl = string.Format(CultureInfo.InvariantCulture, "{0:F00}", z);
+                    lblSize = e.Graphics.MeasureString(lbl, axisLblFont);
+
+                    e.Graphics.DrawString(lbl, axisLblFont, axisLblBrush,
+                        x - axisTickSize - lblSize.Width,
+                        za - lblSize.Height / 2);
+
+                    z += zStep;
+                }
+
+                lbl = string.Format(CultureInfo.InvariantCulture, "{0:F00}", Zmin);
+                lblSize = e.Graphics.MeasureString(lbl, axisLblFont);
+                e.Graphics.DrawString(lbl, axisLblFont, axisLblBrush,
+                    x - axisTickSize - lblSize.Width,
+                    graphBorder.Top - lblSize.Height / 2);
+
+                lbl = string.Format(CultureInfo.InvariantCulture, "{0:F00}", Zmax);
+                lblSize = e.Graphics.MeasureString(lbl, axisLblFont);
+                e.Graphics.DrawString(lbl, axisLblFont, axisLblBrush,
+                    x - axisTickSize - lblSize.Width,
+                    graphBorder.Bottom - lblSize.Height / 2);
+
                 for (int i = 0; i < tsp.Length; i++)
                 {                    
-                    z = graphBorder.Top + Convert.ToSingle(tsp[i].Z * zscale);
-
-                    if (i % vTickPeriod == 0)
-                    {
-
-                        e.Graphics.DrawLine(axisPen, x, z, x - axisTickSize, z);
-                        lbl = string.Format(CultureInfo.InvariantCulture, "{0:F00}", tsp[i].Z);
-                        lblSize = e.Graphics.MeasureString(lbl, axisLblFont);
-                        e.Graphics.DrawString(lbl, axisLblFont, axisLblBrush,
-                            x - axisTickSize - lblSize.Width,
-                            z - lblSize.Height / 2);
-                    }
+                    z = graphBorder.Top + Convert.ToSingle(tsp[i].Z * zscale);                    
 
                     if (i < tsp.Length - 1)
                     {

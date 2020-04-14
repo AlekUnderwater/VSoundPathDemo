@@ -42,7 +42,7 @@ namespace SoundPathDemo
                     vProfileView.Invalidate();
                     verticalPropagationPlot.Zmin = vProfileView.Zmin;
                     verticalPropagationPlot.Zmax = vProfileView.Zmax;
-                    verticalPropagationPlot.ZTicks = vProfileView.ZTicks;
+                    verticalPropagationPlot.Zstep = vProfileView.ZStep;
                     verticalPropagationPlot.Invalidate();
 
                     tsp = vProfileView.GetProfile();

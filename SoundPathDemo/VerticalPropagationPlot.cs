@@ -171,6 +171,19 @@ namespace SoundPathDemo
             }
         }
 
+        double zstep = 100;
+        public double Zstep
+        {
+            get { return zstep; }
+            set
+            {
+                if (value > 0)
+                    zstep = value;
+                else
+                    throw new ArgumentOutOfRangeException("Value should be greater than zero");
+            }
+        }
+
         double zmin = 0;
         public double Zmin
         {
@@ -184,20 +197,6 @@ namespace SoundPathDemo
             }
         }
 
-        public readonly int ZTicksMax = 50;
-        int zTicks = 10;
-        public int ZTicks
-        {
-            get { return zTicks; }
-            set
-            {
-                if ((value > 0) && (value <= ZTicksMax))
-                    zTicks = value;
-                else
-                    throw new ArgumentOutOfRangeException("Value should be greater than zero and less or equal to ZTicksMax");
-
-            }
-        }
 
         double pTime = 1.0;
         public double FullPropagationTime
@@ -379,7 +378,7 @@ namespace SoundPathDemo
                     this.Height - graphBorderTop - axisLblMaxSize.Height - axisTickSize);
 
 
-                float zscale = graphBorder.Height / Convert.ToSingle(Math.Abs(Zmax));                
+                float zscale = graphBorder.Height / Convert.ToSingle(Math.Abs(Zmax - Zmin));                
 
                 e.Graphics.DrawRectangle(axisPen, graphBorder.Left, graphBorder.Top, graphBorder.Width, graphBorder.Height);
 
@@ -400,20 +399,38 @@ namespace SoundPathDemo
                     -(graphBorder.Top + graphBorder.Height / 2 - lblSize.Width / 2));
 
                 float z;
-                float zStep = Convert.ToSingle((zmax - zmin) / zTicks);
-                float x = graphBorder.Left;
+                float zStep = Convert.ToSingle(zstep);
+                float x = graphBorder.Left;                
+                z = zStep;
 
-                for (int i = 0; i <= zTicks; i++)
+                float za;
+                while (z <= Zmax - zStep / 2)
                 {
-                    z = graphBorder.Top + zStep * i * zscale;
-
-                    e.Graphics.DrawLine(axisPen, x, z, x - axisTickSize, z);
-                    lbl = string.Format(CultureInfo.InvariantCulture, "{0:F00}", zStep * i + zmin);
+                    za = graphBorder.Top + z * zscale;
+                    e.Graphics.DrawLine(axisPen, x, za, x - axisTickSize, za);
+                    lbl = string.Format(CultureInfo.InvariantCulture, "{0:F00}", z);
                     lblSize = e.Graphics.MeasureString(lbl, axisLblFont);
+
                     e.Graphics.DrawString(lbl, axisLblFont, axisLblBrush,
                         x - axisTickSize - lblSize.Width,
-                        z - lblSize.Height / 2);
+                        za - lblSize.Height / 2);
+
+                    z += zStep;
                 }
+
+                lbl = string.Format(CultureInfo.InvariantCulture, "{0:F00}", Zmin);
+                lblSize = e.Graphics.MeasureString(lbl, axisLblFont);
+                e.Graphics.DrawString(lbl, axisLblFont, axisLblBrush,
+                    x - axisTickSize - lblSize.Width,
+                    graphBorder.Top - lblSize.Height / 2);
+
+                lbl = string.Format(CultureInfo.InvariantCulture, "{0:F00}", Zmax);
+                lblSize = e.Graphics.MeasureString(lbl, axisLblFont);
+                e.Graphics.DrawString(lbl, axisLblFont, axisLblBrush,
+                    x - axisTickSize - lblSize.Width,
+                    graphBorder.Bottom - lblSize.Height / 2);
+
+
 
                 int nView = zcoordinates.Count;
                 if (nView > 0)
