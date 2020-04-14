@@ -1,5 +1,6 @@
 # VSoundPathDemo
-Visualisation of sound propagation in vertical seawater coloumn, considering TS-profile
+Visualisation of sound propagation in vertical seawater coloumn, considering TS-profile.
+In this model we do not take into account refraction and beam spreading - only variability of speed of sound with depth.
 
 ## Basic theory
 Since the speed of sound is a function of temperature, pressure and salinity (a function of the density of water, in other words) and the water in the seas and oceans is stratified into layers with different densities, the actual path travelled, for example, by the signal of an acoustic depth gauge (sonar) should be calculated as an integral of speed by time.
