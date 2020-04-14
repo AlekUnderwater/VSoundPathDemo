@@ -11,8 +11,9 @@ Since the speed of sound is a function of temperature, pressure and salinity (a 
 * Save animation frames from the simulation
 
 ## Misc.
-Calculation of depth, speed of sound in water are based on [UCNLPhysics library](https://github.com/ucnl/UCNLPhysics)  
-We appreciate stars!
+* Calculation of depth, speed of sound in water are based on [UCNLPhysics library](https://github.com/ucnl/UCNLPhysics)  
+* To build the app you will also need [UCNLDrivers library](https://github.com/ucnl/UCNLDrivers)
+* We appreciate stars!
 
 ## Application window
 ![Screenshot](/Pics/screen1.png)
