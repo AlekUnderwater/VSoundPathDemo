@@ -19,5 +19,6 @@ Since the speed of sound is a function of temperature, pressure and salinity (a 
 ![Screenshot](/Pics/screen1.png)
 
 ## Simulation
+(may be displaying not in real-time, beacuse it's a GIF image. Run the application for precise timing)
 ![Simulation](/Pics/simulation.gif)
 
